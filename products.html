@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fresh Ever Organic - Products</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .intro-box {
+      background-color: #f3f8f2;
+      padding: 20px;
+      text-align: center;
+    }
+    .intro-box h2 {
+      margin: 0 0 10px;
+      color: #2e7d32;
+    }
+    .intro-box p {
+      margin: 0 auto 15px;
+      max-width: 700px;
+      font-size: 1rem;
+      color: #444;
+    }
+    .browse-btn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 1rem;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+      transition: background-color 0.3s ease;
+    }
+    .browse-btn:hover {
+      background-color: #388e3c;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ Header / Menu Bar -->
+  <header>
+    <h1>FRESH EVER ORGANIC</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="contact.html">Contact</a>
+      <a href="cart.html">Cart 🛒</a>
+    </nav>
+  </header>
+
+  <!-- ✅ Organic Products Info Section -->
+  <div class="intro-box">
+    <h2>Pure. Healthy. Organic.</h2>
+    <p>
+      At Fresh Ever Organic, we offer a handpicked range of organic grains, spices, and wellness products that are grown without chemicals or pesticides. Our mission is to support sustainable living and provide safe, wholesome nutrition to your family.
+    </p>
+    <a class="browse-btn" href="products_c.html">🍱 Browse by Categories</a>
+  </div>
+
+  <!-- ✅ Products Section -->
+  <section class="products" id="product-list">
+    <p style="text-align: center;">Loading products...</p>
+  </section>
+
+  <!-- ✅ Floating Cart Icon -->
+  <div class="cart-icon" onclick="location.href='cart.html'">
+    🛒<span id="cart-count">0</span>
+  </div>
+
+ <!-- ✅ Stylish Footer -->
+<footer style="background: #2e7d32; color: white; padding: 30px 20px; text-align: center;">
+  <h3 style="margin: 0 0 10px; font-size: 1.5em;">Fresh Ever Organic</h3>
+  <p style="margin: 0 0 20px;">Built with care for healthy living 🌿</p>
+
+  <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 15px;">
+    <a href="https://www.youtube.com/@YourChannel" target="_blank" style="text-decoration: none;">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/youtube.svg" alt="YouTube" width="30" height="30" style="fill: white; transition: 0.3s;" onmouseover="this.style.fill='#FF0000'" onmouseout="this.style.fill='white'" />
+    </a>
+    <a href="https://www.facebook.com/YourPage" target="_blank" style="text-decoration: none;">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/facebook.svg" alt="Facebook" width="30" height="30" style="fill: white; transition: 0.3s;" onmouseover="this.style.fill='#1877F2'" onmouseout="this.style.fill='white'" />
+    </a>
+    <a href="https://wa.me/94766681346" target="_blank" style="text-decoration: none;">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/whatsapp.svg" alt="WhatsApp" width="30" height="30" style="fill: white; transition: 0.3s;" onmouseover="this.style.fill='#25D366'" onmouseout="this.style.fill='white'" />
+    </a>
+    <a href="https://www.tiktok.com/@YourProfile" target="_blank" style="text-decoration: none;">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/tiktok.svg" alt="TikTok" width="30" height="30" style="fill: white; transition: 0.3s;" onmouseover="this.style.fill='#000000'" onmouseout="this.style.fill='white'" />
+    </a>
+  </div>
+
+  <small style="font-size: 0.9em;">&copy; 2025 Fresh Ever Organic. All rights reserved.</small>
+</footer>
+
+
+  <!-- ✅ Script -->
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzJLjd_7e5PVqkOqTba8n20uimslaEbecYkMaIOjSK-x34lfrRZel-7YPZMRbOK0-no/exec';
+
+    fetch(scriptURL)
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('product-list');
+        container.innerHTML = '';
+        data.forEach(product => {
+          container.innerHTML += `
+            <div class="product-card">
+              <a href="product.html?id=${product.ID}">
+                <img src="${product['Image URL']}" alt="${product.Name}" />
+                <h3>${product.Name}</h3>
+              </a>
+              <p><strong>${product.Price}</strong></p>
+              <p>${product.Description}</p>
+              <button class="add-btn" onclick='addToCart(${JSON.stringify(product)})'>Add to Cart</button>
+            </div>
+          `;
+        });
+        updateCartCount();
+      })
+      .catch(err => {
+        document.getElementById('product-list').innerHTML = "<p style='color: red;'>Failed to load products.</p>";
+        console.error("Fetch error:", err);
+      });
+
+    function getCart() {
+      return JSON.parse(localStorage.getItem('cart') || "[]");
+    }
+
+    function addToCart(product) {
+      const cart = getCart();
+      cart.push(product);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartCount();
+      alert("Added to cart!");
+    }
+
+    function updateCartCount() {
+      document.getElementById('cart-count').textContent = getCart().length;
+    }
+
+    updateCartCount();
+  </script>
+</body>
+</html>

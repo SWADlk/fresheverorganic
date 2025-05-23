@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact Us - Fresh Ever Organic</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ✅ Header / Menu Bar -->
+<header>
+  <h1>FRESH EVER ORGANIC</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="products.html">Products</a>
+    <a href="contact.html">Contact</a>
+    <a href="cart.html">Cart 🛒</a>
+  </nav>
+</header>
+
+<!-- ✅ About Us Section -->
+<div class="container" style="margin-bottom: 30px;">
+  <h2>About Us</h2>
+  <p>
+    At <strong>Fresh Ever Organic</strong>, we are committed to providing healthy, organic food directly from the farm to your table.
+    We believe in supporting sustainable farming practices and empowering local farmers while delivering the freshest produce to our customers islandwide.
+  </p>
+  <p>
+    From naturally grown grains to handpicked spices, our mission is to promote a lifestyle rooted in wellness, environmental responsibility, and ethical sourcing.
+  </p>
+</div>
+
+<!-- ✅ Contact Form Section -->
+<div class="container">
+  <h2>Contact Us</h2>
+  <form id="contactForm">
+    <input type="text" id="name" placeholder="Your Name" required />
+    <input type="text" id="phone" placeholder="Your Phone" required />
+    <textarea id="message" placeholder="Your Message" rows="5" required></textarea>
+    <button type="submit">Send Message</button>
+  </form>
+  <p class="success" id="successMsg"></p>
+</div>
+
+
+<!-- ✅ Stylish Footer -->
+<footer style="background: #2e7d32; color: white; padding: 30px 20px; text-align: center;">
+  <h3 style="margin: 0 0 10px; font-size: 1.5em;">Fresh Ever Organic</h3>
+  <p style="margin: 0 0 20px;">Built with care for healthy living 🌿</p>
+
+  <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 15px;">
+    <a href="https://www.youtube.com/@YourChannel" target="_blank" style="text-decoration: none;">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/youtube.svg" alt="YouTube" width="30" height="30" style="fill: white; transition: 0.3s;" onmouseover="this.style.fill='#FF0000'" onmouseout="this.style.fill='white'" />
+    </a>
+    <a href="https://www.facebook.com/YourPage" target="_blank" style="text-decoration: none;">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/facebook.svg" alt="Facebook" width="30" height="30" style="fill: white; transition: 0.3s;" onmouseover="this.style.fill='#1877F2'" onmouseout="this.style.fill='white'" />
+    </a>
+    <a href="https://wa.me/94766681346" target="_blank" style="text-decoration: none;">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/whatsapp.svg" alt="WhatsApp" width="30" height="30" style="fill: white; transition: 0.3s;" onmouseover="this.style.fill='#25D366'" onmouseout="this.style.fill='white'" />
+    </a>
+    <a href="https://www.tiktok.com/@YourProfile" target="_blank" style="text-decoration: none;">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/tiktok.svg" alt="TikTok" width="30" height="30" style="fill: white; transition: 0.3s;" onmouseover="this.style.fill='#000000'" onmouseout="this.style.fill='white'" />
+    </a>
+  </div>
+
+  <small style="font-size: 0.9em;">&copy; 2025 Fresh Ever Organic. All rights reserved.</small>
+</footer>
+
+
+
+<script>
+  const sheetURL = 'https://script.google.com/macros/s/AKfycbzJLjd_7e5PVqkOqTba8n20uimslaEbecYkMaIOjSK-x34lfrRZel-7YPZMRbOK0-no/exec';
+
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const message = document.getElementById('message').value;
+
+    fetch(sheetURL, {
+      method: 'POST',
+      body: JSON.stringify({
+        type: 'message',
+        name,
+        phone,
+        message
+      })
+    })
+    .then(res => res.text())
+    .then(response => {
+      document.getElementById('successMsg').textContent = 'Thank you! Your message has been sent.';
+      document.getElementById('contactForm').reset();
+    })
+    .catch(error => {
+      document.getElementById('successMsg').textContent = 'Something went wrong. Please try again.';
+      console.error('Error!', error.message);
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Cart</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ✅ Header / Menu Bar -->
+  <header>
+    <h1>FRESH EVER ORGANIC</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="contact.html">Contact</a>
+      <a href="cart.html">Cart 🛒</a>
+    </nav>
+  </header>
+
+  <!-- ✅ Cart Section -->
+  <div class="cart-container">
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <p class="total" id="cart-total">Total: Rs. 0</p>
+
+    <form id="checkoutForm">
+      <input type="text" id="name" placeholder="Your Name" required>
+      <input type="text" id="phone" placeholder="Phone / WhatsApp" required>
+      <button type="submit">Checkout via WhatsApp</button>
+    </form>
+  </div>
+
+ <!-- ✅ Stylish Footer -->
+<footer style="background: #2e7d32; color: white; padding: 30px 20px; text-align: center;">
+  <h3 style="margin: 0 0 10px; font-size: 1.5em;">Fresh Ever Organic</h3>
+  <p style="margin: 0 0 20px;">Built with care for healthy living 🌿</p>
+
+  <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 15px;">
+    <a href="https://www.youtube.com/@YourChannel" target="_blank" style="text-decoration: none;">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/youtube.svg" alt="YouTube" width="30" height="30" style="fill: white; transition: 0.3s;" onmouseover="this.style.fill='#FF0000'" onmouseout="this.style.fill='white'" />
+    </a>
+    <a href="https://www.facebook.com/YourPage" target="_blank" style="text-decoration: none;">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/facebook.svg" alt="Facebook" width="30" height="30" style="fill: white; transition: 0.3s;" onmouseover="this.style.fill='#1877F2'" onmouseout="this.style.fill='white'" />
+    </a>
+    <a href="https://wa.me/94766681346" target="_blank" style="text-decoration: none;">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/whatsapp.svg" alt="WhatsApp" width="30" height="30" style="fill: white; transition: 0.3s;" onmouseover="this.style.fill='#25D366'" onmouseout="this.style.fill='white'" />
+    </a>
+    <a href="https://www.tiktok.com/@YourProfile" target="_blank" style="text-decoration: none;">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/tiktok.svg" alt="TikTok" width="30" height="30" style="fill: white; transition: 0.3s;" onmouseover="this.style.fill='#000000'" onmouseout="this.style.fill='white'" />
+    </a>
+  </div>
+
+  <small style="font-size: 0.9em;">&copy; 2025 Fresh Ever Organic. All rights reserved.</small>
+</footer>
+
+
+  <!-- ✅ Script -->
+  <script>
+    const whatsappNumber = '94778166154';
+    const sheetURL = 'https://script.google.com/macros/s/AKfycbzJLjd_7e5PVqkOqTba8n20uimslaEbecYkMaIOjSK-x34lfrRZel-7YPZMRbOK0-no/exec';
+
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const itemsContainer = document.getElementById('cart-items');
+    let total = 0;
+
+    if (cart.length === 0) {
+      itemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+    } else {
+      cart.forEach(item => {
+        const priceMatch = item.Price.match(/(\d+)/);
+        total += priceMatch ? parseInt(priceMatch[1]) : 0;
+        itemsContainer.innerHTML += `
+          <div class="cart-item">
+            <span>${item.Name}</span>
+            <span>${item.Price}</span>
+          </div>
+        `;
+      });
+    }
+
+    document.getElementById('cart-total').textContent = `Total: Rs. ${total}`;
+
+    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const items = cart.map(p => `${p.Name} (${p.Price})`).join(', ');
+
+      // Save to Google Sheet
+      fetch(sheetURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          type: 'order',
+          name,
+          phone,
+          items,
+          total: `Rs. ${total}`
+        })
+      });
+
+      // Open WhatsApp
+      const message = `Hi, I would like to order: ${items}. My name is ${name}, contact: ${phone}. Total: Rs. ${total}`;
+      window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
+
+      localStorage.removeItem('cart');
+      alert('Order sent successfully!');
+      location.href = 'products.html';
+    });
+  </script>
+</body>
+</html>

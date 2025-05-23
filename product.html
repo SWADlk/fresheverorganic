@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Product Detail</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ✅ Header / Menu Bar -->
+<header>
+  <h1>FRESH EVER ORGANIC</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="products.html">Products</a>
+    <a href="contact.html">Contact</a>
+    <a href="cart.html">Cart 🛒</a>
+  </nav>
+</header>
+
+<!-- ✅ Product Display -->
+<div class="product-detail" id="product-container">
+  <p>Loading product...</p>
+</div>
+
+<!-- ✅ Floating Cart Icon -->
+<div class="cart-icon" onclick="location.href='cart.html'">
+  🛒<span id="cart-count">0</span>
+</div>
+
+<!-- ✅ Footer -->
+<footer>
+  &copy; 2025 Fresh Ever Organic. Built with care for healthy living 🌿
+</footer>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const productId = params.get("id");
+
+  fetch('https://script.google.com/macros/s/AKfycbzJLjd_7e5PVqkOqTba8n20uimslaEbecYkMaIOjSK-x34lfrRZel-7YPZMRbOK0-no/exec')
+    .then(res => res.json())
+    .then(products => {
+      const product = products.find(p => p.ID == productId); // ✅ Fix: match as number
+      if (!product) {
+        document.getElementById("product-container").innerHTML = "<p>Product not found.</p>";
+        return;
+      }
+      document.getElementById("product-container").innerHTML = `
+        <img src="${product['Image URL']}" alt="${product.Name}" style="width:100%; border-radius:10px;" />
+        <h2>${product.Name}</h2>
+        <p class="price">${product.Price}</p>
+        <p><strong>Description:</strong> ${product.Description}</p>
+        <p><strong>Highlights:</strong> ${product.Highlights}</p>
+        <p><strong>Usage:</strong> ${product.Usage}</p>
+        <p><strong>Delivery Info:</strong> ${product["Delivery Info"]}</p>
+        <button onclick='addToCart(${JSON.stringify(product)})'>Add to Cart</button>
+      `;
+    });
+
+  function addToCart(product) {
+    const cart = JSON.parse(localStorage.getItem('cart') || "[]");
+    cart.push(product);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert("Added to cart!");
+    updateCartCount();
+  }
+
+  function getCart() {
+    return JSON.parse(localStorage.getItem('cart') || "[]");
+  }
+
+  function updateCartCount() {
+    document.getElementById('cart-count').textContent = getCart().length;
+  }
+
+  updateCartCount();
+</script>
+
+</body>
+</html>
