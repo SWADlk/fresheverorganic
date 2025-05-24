@@ -61,6 +61,9 @@
       <a href="products.html">Products</a>
       <a href="contact.html">Contact</a>
       <a href="cart.html">Cart 🛒</a>
+      <select id="categoryDropdown" style="margin-left: 20px; padding: 6px;">
+      <option disabled selected>Select Category</option>
+      </select>
     </nav>
   </header>
 
@@ -218,5 +221,25 @@
     const diffX = e.changedTouches[0].clientX - startX;
     if (diffX > 50) slide(-1);
     if (diffX < -50) slide(1);
+  });
+</script>
+<script>
+  // Dynamically load categories into dropdown
+  const dropdown = document.getElementById('categoryDropdown');
+  fetch('https://script.google.com/macros/s/AKfycbzJLjd_7e5PVqkOqTba8n20uimslaEbecYkMaIOjSK-x34lfrRZel-7YPZMRbOK0-no/exec')
+    .then(res => res.json())
+    .then(data => {
+      const categories = [...new Set(data.map(p => p.Category))].sort();
+      categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        dropdown.appendChild(option);
+      });
+    });
+
+  dropdown.addEventListener('change', e => {
+    const category = e.target.value;
+    window.location.href = `category.html?type=${encodeURIComponent(category)}`;
   });
 </script>
