@@ -38,7 +38,7 @@
   const params = new URLSearchParams(window.location.search);
   const productId = params.get("id");
 
-  fetch('https://script.google.com/macros/s/AKfycbzJLjd_7e5PVqkOqTba8n20uimslaEbecYkMaIOjSK-x34lfrRZel-7YPZMRbOK0-no/exec')
+  fetch('https://script.google.com/macros/s/AKfycby4PwKocaG6IBZT5yyfjjvlVeQcvdL7Q_Y_ZTniy1Mh-Q-RCzNIU7cc4aA_Ur4q9sn0AQ/exec')
     .then(res => res.json())
     .then(products => {
       const product = products.find(p => p.ID == productId); // ✅ Fix: match as number
